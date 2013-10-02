@@ -1,6 +1,7 @@
 <?php
 $object = $vars['object'];
 $owner = IdnoPlugins\Subscribe\Main::getAuthorFromMF2($object->data);
+$content = IdnoPlugins\Subscribe\Main::getContentFromMF2($object->data);
 
 ?>
 <div class="row idno-entry idno-entry-<?php
@@ -38,23 +39,9 @@ $owner = IdnoPlugins\Subscribe\Main::getAuthorFromMF2($object->data);
             
             <h2 class="p-name"><a class="icon-globe" href="<?= $object->permalink;?>" target="_blank"> <?= $object->permalink;?></a></h2>
             <?php 
-                $data = $object->data;
-                
-                if (empty($data)) { 
-                    
-                    foreach ($data->items as $item) {
-                                
-                        // Find the entry
-                        if (in_array('h-entry', $item->type)) {
-                            if (!$content)
-                                $content = strip_tags($item->properties->content[0], '<p><br><a>');
-                        }
-                        
-                    }
-                    
-                    if (empty($content))
-                        $this->autop($this->parseHashtags($content)); 
-                }?>
+                if (!empty($content))
+                    echo $this->autop($this->parseHashtags($content['content'])); 
+                ?>
             
             
             
