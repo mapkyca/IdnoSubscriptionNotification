@@ -8,6 +8,12 @@ namespace IdnoPlugins\Notification {
             return 'false';
         }
 
+        function getURL() {
+            if (!empty($this->permalink))
+                return $this->permalink;
+            
+            return parent::getURL();
+        }
     }
 
 }
