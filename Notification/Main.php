@@ -19,6 +19,7 @@ namespace IdnoPlugins\Notification {
         }
 
         function registerEventHooks() {
+                        
             \Idno\Core\site()->addEventHook('subscription/post/update', function(\Idno\Core\Event $event) {
 
                         $permalink = $event->data()['permalink'];
@@ -29,7 +30,8 @@ namespace IdnoPlugins\Notification {
                         {
                             $notification = new Notification();
                             $notification->permalink = $permalink;
-                            $notification->subscription = $subscription;
+                            $notification->subscriber = $subscription->subscriber;
+                            $notification->subscription = $subscription->subscription;
                             if (!empty($data))
                                 $notification->data = $data;
                          
@@ -44,12 +46,15 @@ namespace IdnoPlugins\Notification {
          * @return type
          */
         static function countNewNotifications() {
-            $time = \Idno\Core\site()->session()->currentUser()->notifications_last_read;
-            if (empty($time))
-                $time = 0;
-            $notify = \Idno\Core\site()->db()->countObjects('IdnoPlugins\Notification\Notification', ['subscription' => \Idno\Core\site()->session()->currentUser()->getUrl(), 'created' => ['$gte' => $time]]);
-            
-            return $notify;
+            if (\Idno\Core\site()->session()->isLoggedIn()) {
+                $time = \Idno\Core\site()->session()->currentUser()->notifications_last_read;
+                if (empty($time))
+                    $time = 0;
+                $notify = \Idno\Core\site()->db()->countObjects('IdnoPlugins\Notification\Notification', ['subscriber' => \Idno\Core\site()->session()->currentUser()->getUrl(), 'created' => ['$gte' => $time]]);
+
+                return $notify;
+            }
+            return 0;
         }
 
     }

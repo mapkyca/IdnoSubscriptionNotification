@@ -11,7 +11,7 @@ namespace IdnoPlugins\Notification\Pages {
 
             $t = \Idno\Core\site()->template();
             $body = $t->__(array(
-                        'objects' => \Idno\Core\site()->db()->getObjects('IdnoPlugins\Notification\Notification', ['subscription' => $user->getUrl()])
+                        'objects' => \Idno\Core\site()->db()->getObjects('IdnoPlugins\Notification\Notification', ['subscriber' => $user->getUrl()])
                     ))->draw('entity/Notification/list');
 
             $title = 'Your Friend\'s Activity';
